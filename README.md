@@ -35,3 +35,11 @@ Design
 Det startade med att jag skulle göra en webbbutik där jag fokuserade på baksidan och där jag hade som mål att kunna lagra produkter och användare. Men nu ska jag även ha som mål att skapa ett användargränssnitt för webbutikens ägare så att hen enkelt kan redigera: namn, pris och bilde, ta bort och lägga till produkter.
 
 Idag började jag att lära mig React genom att kolla på Mosh 1.20h tutorial.
+
+2024-12-12
+React kan inte returna 2 element. Måste därför wrappa allting inom en fragment.
+For loop finns inte så man måste använda en metod som kallas mapping
+Ex.
+Const items = ['Item 1', 'item 2', 'item 3'];
+map(item => <li>{item}<li> )
+Detta skriver ut en lista med innehållet i items.
