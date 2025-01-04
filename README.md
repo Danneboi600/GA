@@ -43,3 +43,8 @@ Ex.
 Const items = ['Item 1', 'item 2', 'item 3'];
 map(item => <li>{item}<li> )
 Detta skriver ut en lista med innehållet i items.
+
+2025-01-03
+Type annotation, speciferar vilken typ av varibel/parameter. Importerade typen först. 
+
+&& istället för ? om man ska ha null som resultat, därför att && innebär att man skriver ut det som står i if-satsen om det är korrekt och om det är falskt skrivs ingenting ut. 
