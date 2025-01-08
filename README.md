@@ -48,3 +48,13 @@ Detta skriver ut en lista med innehållet i items.
 Type annotation, speciferar vilken typ av varibel/parameter. Importerade typen först. 
 
 && istället för ? om man ska ha null som resultat, därför att && innebär att man skriver ut det som står i if-satsen om det är korrekt och om det är falskt skrivs ingenting ut. 
+
+2025-01-08
+Components have states and when the component changes react will update the DOM to change the components state. 
+
+const [selectedIndex, setSelectedIndex] = useState(-1);
+onClick={() => {
+              setSelectedIndex(index);
+            }}
+
+Each component is gonig to have its own state
