@@ -58,3 +58,6 @@ onClick={() => {
             }}
 
 Each component is gonig to have its own state
+
+2025-01-09
+Children prop

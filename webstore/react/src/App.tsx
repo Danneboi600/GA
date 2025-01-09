@@ -1,18 +1,14 @@
-import ListGroup from "./components/ListGroup";
-//import Footer from "./components/Footer";
+
+import Button from "./components/Button";
 
 function App() {
-  let items = ["T-Shirts", "Jeans", "Hats", "Sweatshirts", "Accessories"];
-
-    const handleSelectItem = (item: string) => {
-    console.log(item);
-  }
-
-  return (
+  return(
     <div>
-      <ListGroup items={items} heading="Clothes" onSelectItem={handleSelectItem}/>
+      <Button color="danger" onClick={() => console.log('Clicked')}>
+        My Button
+      </Button>
     </div>
-  );
+  )
 }
 
 export default App;
