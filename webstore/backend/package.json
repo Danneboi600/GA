@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "express": "^4.21.1",
+    "mongoose": "^8.8.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.9",
+    "pug": "^3.0.3",
+    "tailwinds": "^0.0.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.16"
+  }
+}
