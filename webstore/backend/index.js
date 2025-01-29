@@ -37,13 +37,15 @@ app.post('/form', async (req,res)=>{
     console.log(req.body);
     await Product.create({
       productNames: req.body.productNames,
+      productPrices: req.body.productPrices,
+      productImages: req.body.productImages,
     });
     res.redirect('/');
 });
  
 app.get('/products', async (req,res)=>{
-  await Product.find();
-  const productNames = products.map(product => product.productNames); 
-  res.json(productNames);
+  await Product.find()
+  .then(products => res.json(products))
+  .catch(err => res.json(err))
 });
 

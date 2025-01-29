@@ -1,8 +1,13 @@
 import Products from "./components/Products"
 import Form from "./components/Form"
-
+import {useEffect} from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
+
+  useEffect(()=> {
+
+  }, [])
 
   let productNames = ['product1', 'product2']
   return (
