@@ -4,6 +4,13 @@ const app = express();
 const mongoose = require("mongoose");
 const Product = require('./models/Product');
 const path = require('path');
+const cors = require('cors');
+
+app.use(cors({
+  origin: "https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/",  // Replace with your frontend URL
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+}));
 
 const uri = "mongodb+srv://danber604:Tisdag0606@cluster0.o1yjf.mongodb.net/webstore?retryWrites=true&w=majority&appName=Cluster0";
 mongoose.connect(uri);
@@ -24,28 +31,27 @@ app.listen(port, ()=>{
     console.log(`Servern är igång på ${port}`);
 }); 
 
-app.get('*', async (req,res) => {
+app.get('/', async (req,res)=>{
+  console.log('Hello world!');
   res.sendFile(path.join(__dirname, '../frontend/react/dist/index.html'));
 });
 
-app.get('/', async (req,res)=>{
-    console.log('Hello world!');
-    res.sendFile(path.join(__dirname, '../frontend/react/dist/index.html'));
- });
-
 app.post('/form', async (req,res)=>{
-    console.log(req.body);
-    await Product.create({
+  console.log(req.body);
+  await Product.create({
       productNames: req.body.productNames,
       productPrices: req.body.productPrices,
       productImages: req.body.productImages,
     });
     res.redirect('/');
-});
- 
-app.get('/products', async (req,res)=>{
-  await Product.find()
-  .then(products => res.json(products))
-  .catch(err => res.json(err))
-});
-
+  });
+  
+  app.get('/products', async (req, res) => {
+    const products = await Product.find(); 
+    console.log(products);
+    res.json(products); 
+  });
+  
+  app.get('*', async (req,res) => {
+    res.sendFile(path.join(__dirname, '../frontend/react/dist/index.html'));
+  });

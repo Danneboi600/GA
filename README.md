@@ -61,3 +61,16 @@ Each component is gonig to have its own state
 
 2025-01-09
 Children prop
+
+2025-01-15
+https://www.youtube.com/watch?v=w3vs4a03y3I
+
+2025-01-16
+https://www.youtube.com/watch?v=SqcY0GlETPk&t=163s
+
+2025-01-27
+Idag försökte jag att koppla samman så att react kunde använda data från mongodb och jag hade även problem med react formuläret då det skickade in tom data och det visade sig att jag hade skrivit fel på modellen och namnet i formuläret. Jag har även nyligen försökt att koppla react med node istället för pug. 
+Nu har jag insett att jag inte har kunnat commita min sync vilket är väldigt problematiskt. 
+
+2025-01-29
+Idag hade jag ett problem med att hämta data från mongoDb till react då jag hade gjort en lista, men den visade ingen data. Jag hade gjort ett misstag och använt localhost istället för URL till servern. Och sedan var det förmodligen ett cors problem. 

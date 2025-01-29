@@ -1,18 +1,34 @@
 import Products from "./components/Products"
 import Form from "./components/Form"
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+
+interface Product {
+  _id: string;
+  productNames: string;
+  productPrices: string;
+  productImages: string;
+}
 
 function App() {
 
-  useEffect(()=> {
+  const [products, setProducts] = useState<Product[]>([]);
 
+  useEffect(()=> {
+    axios.get("https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/products")
+    .then(response => {
+      console.log(response.data)
+      setProducts(response.data)
+    })
+    .catch(error => {
+      console.error("There was an error making the request:", error);
+    })
   }, [])
 
-  let productNames = ['product1', 'product2']
   return (
     <div>
-      <Products productNames={productNames} heading="Products" ></Products>
+      <Products products={products} heading="Products" ></Products>
       <Form></Form>
     </div>
   )

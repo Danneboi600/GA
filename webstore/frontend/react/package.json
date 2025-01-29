@@ -1,7 +1,7 @@
 {
   "name": "react",
   "private": true,
-  "proxy": "http://localhost:3000",
+  "proxy": "https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
