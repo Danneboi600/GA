@@ -1,0 +1,24 @@
+*{
+    max-height: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.products{
+    display: grid;
+    grid-template-columns: auto auto auto auto
+}
+
+.products-item{
+    border: solid black 1px;
+    list-style-type: none;
+    display: flex;
+}
+
+.testImg{
+    padding: 100px;
+    background-color:blueviolet;
+}
+
+
+

@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 interface ListGroupProps {
   items: string[];
   heading: string;

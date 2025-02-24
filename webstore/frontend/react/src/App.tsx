@@ -1,8 +1,9 @@
-import Products from "./components/Products"
-import Form from "./components/Form"
+import Products from "./components/Products";
+import Form from "./components/Form";
 import {useEffect, useState} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import Footer from "./components/Footer";
 
 interface Product {
   _id: string;
@@ -29,6 +30,7 @@ function App() {
   return (
     <div>
       <Products products={products} heading="Products" ></Products>
+      <Footer></Footer>
       <Form></Form>
     </div>
   )

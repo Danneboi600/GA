@@ -1,3 +1,5 @@
+import "../styles/Products.css";
+
 interface Product {
     _id: string;
     productNames: string;
@@ -17,8 +19,12 @@ const Products = ({heading, products}: Props) => {
             <h1>{heading}</h1>
             <ul className="products">
                 {products.map((product, index) => (
-                    <li className="products-item" key={index}
-                    >{product.productNames}</li>
+                    <a href="/products/ {student._id} "  className="products-item" key={index}
+                    >
+                        <div className="testImg">IMG</div> 
+                        {product.productNames} 
+                        {product.productPrices}
+                    </a>
                 ))}
             </ul>
         </>

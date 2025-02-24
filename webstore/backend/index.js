@@ -51,6 +51,22 @@ app.post('/form', async (req,res)=>{
     console.log(products);
     res.json(products); 
   });
+
+  app.post('/products/:id', async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    product.productNames = req.body.productNames;
+    product.productPrices = req.body.productPrices;
+    product.productImages = req.body.productImages;
+    await product.save();
+    res.redirect(`/students/${product._id}`);
+  })
+  
+  app.get('product/:id', async (req, res) => {
+    const data = {
+      student: await Student.findById(req.params.id)
+    };
+    res.json(data);
+  });
   
   app.get('*', async (req,res) => {
     res.sendFile(path.join(__dirname, '../frontend/react/dist/index.html'));
