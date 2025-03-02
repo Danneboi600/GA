@@ -24,7 +24,7 @@ const Form = () => {
         formData.append("productPrices", price);
 
         try {
-            const response = await fetch("https://orange-carnival-979p44qgprgw377vp.github.dev/:3000/upload", {
+            const response = await fetch("https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/upload", {
                 method: "POST",
                 body: formData,
             });
@@ -39,14 +39,14 @@ const Form = () => {
     return (
         <form onSubmit={handleSubmit}>
             <label>Form</label>
-            <br />
-            <input type="text" name="productNames" placeholder="Product name" onChange={(e) => setName(e.target.value)} />
-            <br />
-            <input type="text" name="productPrices" placeholder="Product price" onChange={(e) => setPrice(e.target.value)} />
-            <br />
-            <input type="file" name="image" accept="image/*" onChange={handleFileChange} />
-            <br />
-            <input type="submit" value="Send" />
+                <br />
+                <input type="text" name="productNames" placeholder="Product name" onChange={(e) => setName(e.target.value)} />
+                <br />
+                <input type="text" name="productPrices" placeholder="Product price" onChange={(e) => setPrice(e.target.value)} />
+                <br />
+                <input type="file" name="image" accept="image/*" onChange={handleFileChange} />
+                <br />
+                <input type="submit" value="Send" />
         </form>
     );
 };

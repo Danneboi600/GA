@@ -8,7 +8,7 @@ const cors = require('cors');
 const multer = require('multer');
 
 app.use(cors({
-  origin: "https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/",  // Replace with your frontend URL
+  origin: "*",  // Replace with your frontend URL
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
@@ -20,11 +20,11 @@ mongoose.connection
   .on("close", () => console.log("mongoose is disconnected"))
   .on("error", (error) => console.log(error));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(morgan("dev"));
 app.use(express.static("public"));
-app.use(express.static(path.join(__dirname, '../frontend/react/dist')));
-app.use(express.json()); 
+app.use(express.static(path.join(__dirname, '../frontend/react/dist'))); 
 
 let port = 3000;
 
@@ -44,7 +44,11 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
   }
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // Allow max 10MB file size
+});
+
 
 // 🔹 Image Upload Route
 app.post('/upload', upload.single('image'), async (req, res) => {
