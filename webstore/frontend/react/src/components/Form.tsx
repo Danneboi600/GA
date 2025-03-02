@@ -24,7 +24,7 @@ const Form = () => {
         formData.append("productPrices", price);
 
         try {
-            const response = await fetch("http://localhost:3000/upload", {
+            const response = await fetch("https://orange-carnival-979p44qgprgw377vp.github.dev/:3000/upload", {
                 method: "POST",
                 body: formData,
             });
