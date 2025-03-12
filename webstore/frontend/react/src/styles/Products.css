@@ -6,7 +6,7 @@
 
 .products {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);  /* ✅ 4 products per row */
+    grid-template-columns: repeat(4, 1fr);  /* ✅ 4 products per row */
     gap: 20px;
     padding: 0;
     list-style: none;
@@ -33,7 +33,6 @@
 }
 
 .product-image {
-    width: 100px;
     height: auto;
     border-radius: 8px;
     object-fit: cover;

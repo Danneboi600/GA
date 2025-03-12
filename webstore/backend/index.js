@@ -6,6 +6,9 @@ const Product = require('./models/Product');
 const path = require('path');
 const cors = require('cors');
 const multer = require('multer');
+const sharp = require("sharp");
+const fs = require("fs");
+const resizeImages = require("./resizeImages");
 
 app.use(cors({
   origin: "*",  // Replace with your frontend URL
@@ -28,8 +31,9 @@ app.use(express.static(path.join(__dirname, '../frontend/react/dist')));
 
 let port = 3000;
 
-app.listen(port, ()=>{
+app.listen( port, async ()=>{
     console.log(`Servern är igång på ${port}`);
+    await resizeImages();
 }); 
 
 app.get('/', async (req,res)=>{
@@ -50,6 +54,8 @@ const upload = multer({
 });
 
 
+
+/*
 // 🔹 Image Upload Route
 app.post('/upload', upload.single('image'), async (req, res) => {
   try {
@@ -62,6 +68,36 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     res.json({ message: "Image uploaded successfully!", product: newProduct });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }s
+});*/
+
+app.post('/upload', upload.single('image'), async (req, res) => {
+  try {
+      if (!req.file) {
+          return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      const inputPath = req.file.path;
+      const outputPath = `./uploads/${req.file.filename}`; // Keep the same name!
+
+      await sharp(inputPath)
+          .rotate()
+          .resize(300, 300, { fit: "cover" })
+          .toFormat("jpeg", { mozjpeg: true, quality: 100 })
+          .toFile(outputPath);
+
+      fs.unlinkSync(inputPath); // Delete original file to save space
+
+      const newProduct = await Product.create({
+          productNames: req.body.productNames,
+          productPrices: req.body.productPrices,
+          productImages: `/uploads/${req.file.filename}`,
+      });
+
+      res.json({ message: "Image uploaded & resized!", product: newProduct });
+
+  } catch (error) {
+      res.status(500).json({ error: error.message });
   }
 });
   
