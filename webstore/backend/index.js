@@ -64,16 +64,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-app.post('/form', async (req,res)=>{
-  console.log(req.body);
-  await Product.create({
-      productNames: req.body.productNames,
-      productPrices: req.body.productPrices,
-      productImages: req.body.productImages,
-    });
-    res.redirect('/');
-  });
   
   app.get('/products', async (req, res) => {
     const products = await Product.find(); 
@@ -83,18 +73,18 @@ app.post('/form', async (req,res)=>{
 
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-  app.post('/products/:id', async (req, res) => {
+  app.put('/products/:id', async (req, res) => {
     const product = await Product.findById(req.params.id);
     product.productNames = req.body.productNames;
     product.productPrices = req.body.productPrices;
     product.productImages = req.body.productImages;
     await product.save();
-    res.redirect(`/students/${product._id}`);
+    res.redirect(`/products/${product._id}`);
   })
   
-  app.get('product/:id', async (req, res) => {
+  app.get('/product/:id', async (req, res) => {
     const data = {
-      student: await Student.findById(req.params.id)
+      student: await Product.findById(req.params.id)
     };
     res.json(data);
   });

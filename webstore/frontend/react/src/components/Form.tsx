@@ -1,6 +1,11 @@
 import { useState } from "react";
+import { Product } from "../types/Product";
 
-const Form = () => {
+interface Props {
+    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+}
+
+const Form = ({ setProducts }: Props) => {
     const [file, setFile] = useState<File | null>(null);
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
@@ -10,31 +15,43 @@ const Form = () => {
       setFile(target.files ? target.files[0] : null);
       };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+    
         if (!file) {
             alert("Please select an image before submitting!");
             return;
         }
-
+    
         const formData = new FormData();
         formData.append("image", file);
         formData.append("productNames", name);
         formData.append("productPrices", price);
-
+    
         try {
             const response = await fetch("https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/upload", {
                 method: "POST",
                 body: formData,
             });
-
-            const data = await response.json();
-            console.log(data);
+    
+            const newProduct = await response.json();
+            console.log("Upload success:", newProduct);
+    
+            //Update state immediately without refreshing
+           
+            setProducts((prevProducts) => [...prevProducts, newProduct]);
+        
+        
+            // Optional: Reset form fields after submission
+            setName("");
+            setPrice("");
+            setFile(null);
+    
         } catch (error) {
             console.error("Upload failed:", error);
         }
     };
+    
 
     return (
         <form onSubmit={handleSubmit}>

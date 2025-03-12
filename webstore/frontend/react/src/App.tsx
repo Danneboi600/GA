@@ -31,7 +31,7 @@ function App() {
     <div>
       <Products products={products} heading="Products" ></Products>
       <Footer></Footer>
-      <Form></Form>
+      <Form setProducts={setProducts}></Form>
     </div>
   )
 
