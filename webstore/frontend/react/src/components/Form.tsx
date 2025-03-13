@@ -1,71 +1,62 @@
 import { useState } from "react";
-import { Product } from "../types/Product";
+import axios from "axios";
+import "../styles/Form.css"; // ✅ Keep CSS import
 
 interface Props {
-    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Form = ({ setProducts }: Props) => {
-    const [file, setFile] = useState<File | null>(null);
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState("");
+const Form = ({ setRefresh }: Props) => {
+  const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [productImage, setProductImage] = useState<File | null>(null);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const target = e.target as HTMLInputElement;
-      setFile(target.files ? target.files[0] : null);
-      };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("productNames", productName);
+    formData.append("productPrices", productPrice);
+    if (productImage) formData.append("image", productImage);
 
-      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-    
-        if (!file) {
-            alert("Please select an image before submitting!");
-            return;
-        }
-    
-        const formData = new FormData();
-        formData.append("image", file);
-        formData.append("productNames", name);
-        formData.append("productPrices", price);
-    
-        try {
-            const response = await fetch("https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/upload", {
-                method: "POST",
-                body: formData,
-            });
-    
-            const newProduct = await response.json();
-            console.log("Upload success:", newProduct);
-    
-            //Update state immediately without refreshing
-           
-            setProducts((prevProducts) => [...prevProducts, newProduct]);
-        
-        
-            // Optional: Reset form fields after submission
-            setName("");
-            setPrice("");
-            setFile(null);
-    
-        } catch (error) {
-            console.error("Upload failed:", error);
-        }
-    };
-    
+    try {
+      await axios.post("https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/upload", formData);
+      setProductName("");
+      setProductPrice("");
+      setProductImage(null);
+      setRefresh(prev => !prev); // ✅ Refresh product list
+    } catch (error) {
+      console.error("Error uploading product:", error);
+    }
+  };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <label>Form</label>
-                <br />
-                <input type="text" name="productNames" placeholder="Product name" onChange={(e) => setName(e.target.value)} />
-                <br />
-                <input type="text" name="productPrices" placeholder="Product price" onChange={(e) => setPrice(e.target.value)} />
-                <br />
-                <input type="file" name="image" accept="image/*" onChange={handleFileChange} />
-                <br />
-                <input type="submit" value="Send" />
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit} className="product-form">
+      <input
+        type="text"
+        placeholder="Product Name"
+        value={productName}
+        onChange={(e) => setProductName(e.target.value)}
+        required
+        className="form-input"
+      />
+      <input
+        type="number"
+        placeholder="Price"
+        value={productPrice}
+        onChange={(e) => setProductPrice(e.target.value)}
+        required
+        className="form-input"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setProductImage(e.target.files ? e.target.files[0] : null)}
+        required
+        className="form-input"
+      />
+      <button type="submit" className="form-button">Upload</button>
+    </form>
+  );
 };
 
 export default Form;

@@ -1,9 +1,9 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Products from "./components/Products";
 import Form from "./components/Form";
-import {useEffect, useState} from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
 import Footer from "./components/Footer";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 interface Product {
   _id: string;
@@ -13,42 +13,26 @@ interface Product {
 }
 
 function App() {
-
   const [products, setProducts] = useState<Product[]>([]);
+  const [refresh, setRefresh] = useState(false); // ✅ Track refresh state
 
-  useEffect(()=> {
+  useEffect(() => {
     axios.get("https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/products")
-    .then(response => {
-      console.log(response.data)
-      setProducts(response.data)
-    })
-    .catch(error => {
-      console.error("There was an error making the request:", error);
-    })
-  }, [])
+      .then(response => {
+        setProducts(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error making the request:", error);
+      });
+  }, [refresh]); // ✅ Only refresh when `refresh` changes
 
   return (
     <div>
-      <Products products={products} heading="Products" ></Products>
-      <Footer></Footer>
-      <Form setProducts={setProducts}></Form>
-    </div>
-  )
-
-  /*
-  const [alertVisible, setAlertVisibility] = useState(false);
-
-  return (
-    <div>
-      {alertVisible && <Alert>My Alert</Alert>}
-      <Button color="primary" onClick={() => setAlertVisibility(true)}>
-        My Button
-      </Button>
+      <Products products={products} heading="Products" />
+      <Form setRefresh={setRefresh} />  {/* ✅ Trigger refresh after uploading */}
+      <Footer />
     </div>
   );
-
-  */
 }
-
 
 export default App;

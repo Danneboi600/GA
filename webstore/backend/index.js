@@ -11,7 +11,7 @@ const fs = require("fs");
 const resizeImages = require("./resizeImages");
 
 app.use(cors({
-  origin: "*",  // Replace with your frontend URL
+  origin: "*", //Replace with your frontend URL
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
@@ -28,6 +28,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, '../frontend/react/dist'))); 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 let port = 3000;
 
@@ -55,59 +56,75 @@ const upload = multer({
 
 
 
-/*
-// 🔹 Image Upload Route
+
 app.post('/upload', upload.single('image'), async (req, res) => {
   try {
+    console.log('Received file:', req.file); // Debug: Check if file is received
+    console.log('Received body:', req.body);
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const originalPath = req.file.path; // Original file path
+    const resizedFilename = `resized-${req.file.filename}`;
+    const resizedPath = path.join(__dirname, 'uploads', resizedFilename);
+
+    // Resize the image
+    await sharp(originalPath)
+      .rotate()
+      .resize(300, 300, { fit: "cover" })
+      .toFormat("jpeg", { mozjpeg: true, quality: 100 })
+      .toFile(resizedPath);
+
+    // Delete the original image after resizing
+    fs.unlinkSync(originalPath);
+
+    // Save to database
     const newProduct = await Product.create({
       productNames: req.body.productNames,
       productPrices: req.body.productPrices,
-      productImages: `/uploads/${req.file.filename}`, // Store file path
+      productImages: `/uploads/${resizedFilename}`, // Store new resized file path
     });
 
-    res.json({ message: "Image uploaded successfully!", product: newProduct });
+    res.json({ message: "Image uploaded & resized successfully!", product: newProduct });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }s
-});*/
-
-app.post('/upload', upload.single('image'), async (req, res) => {
-  try {
-      if (!req.file) {
-          return res.status(400).json({ error: "No file uploaded" });
-      }
-
-      const inputPath = req.file.path;
-      const outputPath = `./uploads/${req.file.filename}`; // Keep the same name!
-
-      await sharp(inputPath)
-          .rotate()
-          .resize(300, 300, { fit: "cover" })
-          .toFormat("jpeg", { mozjpeg: true, quality: 100 })
-          .toFile(outputPath);
-
-      fs.unlinkSync(inputPath); // Delete original file to save space
-
-      const newProduct = await Product.create({
-          productNames: req.body.productNames,
-          productPrices: req.body.productPrices,
-          productImages: `/uploads/${req.file.filename}`,
-      });
-
-      res.json({ message: "Image uploaded & resized!", product: newProduct });
-
-  } catch (error) {
-      res.status(500).json({ error: error.message });
   }
 });
-  
+
   app.get('/products', async (req, res) => {
     const products = await Product.find(); 
     console.log(products);
     res.json(products); 
   });
 
-  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+  app.delete('/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
+
+        // Get image file path
+        const imagePath = path.join(__dirname, product.productImages);
+        
+        // Delete the image file if it exists
+        if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath);
+            console.log(`🗑️ Deleted image: ${imagePath}`);
+        }
+
+        // Remove product from database
+        await Product.findByIdAndDelete(req.params.id);
+        res.json({ message: "Product deleted successfully!" });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
   app.put('/products/:id', async (req, res) => {
     const product = await Product.findById(req.params.id);
