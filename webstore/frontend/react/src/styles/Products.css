@@ -56,7 +56,10 @@
     list-style-type: none;
     display: flex;
 }
-*/
+
+.delete-button{
+    border-radius: 5px;
+}
 
 
 

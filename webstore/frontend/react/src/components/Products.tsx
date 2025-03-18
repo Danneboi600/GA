@@ -1,4 +1,5 @@
 import "../styles/Products.css";
+import axios from "axios";
 
 interface Product {
     _id: string;
@@ -10,9 +11,19 @@ interface Product {
 interface Props {
     heading: string;
     products: Product[];
+    setRefresh: React.Dispatch<React.SetStateAction<boolean>>; // ✅ Add this prop
 }
 
-const Products: React.FC<Props> = ({ heading, products }) => {  
+const Products: React.FC<Props> = ({ heading, products, setRefresh }) => {  
+    const handleDelete = async (id: string) => {
+        try {
+            await axios.delete(`https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/products/${id}`);
+            setRefresh(prev => !prev); // ✅ Refresh product list after deletion
+        } catch (error) {
+            console.error("Error deleting product:", error);
+        }
+    };
+
     return (
         <>
             <h1>{heading}</h1>
@@ -30,6 +41,7 @@ const Products: React.FC<Props> = ({ heading, products }) => {
                                 <div>{product.productPrices}$</div>
                             </div>
                         </a>
+                        <button className="delete-button" onClick={() => handleDelete(product._id)}>Delete</button> {/* ✅ Add Delete Button */}
                     </li> 
                 ))}
             </ul>

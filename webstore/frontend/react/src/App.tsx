@@ -14,7 +14,7 @@ interface Product {
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [refresh, setRefresh] = useState(false); // ✅ Track refresh state
+  const [refresh, setRefresh] = useState(false); //  Track refresh state
 
   useEffect(() => {
     axios.get("https://orange-carnival-979p44qgprgw377vp-3000.app.github.dev/products")
@@ -24,12 +24,12 @@ function App() {
       .catch(error => {
         console.error("There was an error making the request:", error);
       });
-  }, [refresh]); // ✅ Only refresh when `refresh` changes
+  }, [refresh]); //  Only refresh when `refresh` changes
 
   return (
     <div>
-      <Products products={products} heading="Products" />
-      <Form setRefresh={setRefresh} />  {/* ✅ Trigger refresh after uploading */}
+      <Products products={products} heading="Products" setRefresh={setRefresh}/>
+      <Form setRefresh={setRefresh} />  {/*  Trigger refresh after uploading */}
       <Footer />
     </div>
   );
